@@ -20,6 +20,10 @@ public class frmProductos {
     private JButton buttonGrabar;
     private JButton buttonBuscar;
     private JButton buttonActualizar;
+    private JLabel lblPrecio;
+    private JLabel lblCantidad;
+    private JTextField textFieldPrecio;
+    private JTextField textFieldCantidad;
 
     public static void main(String[] args) {
         JFrame frame = new JFrame("frmProductos");
@@ -53,6 +57,8 @@ public class frmProductos {
 
             }
         });
+
+
         buttonBuscar.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -83,6 +89,9 @@ public class frmProductos {
                 int idProducto = textFieldidProducto.getText().isEmpty() ? 0 : Integer.parseInt(textFieldidProducto.getText());
                 String descripcion = textFieldNombreProducto.getText();
                 String origen = comboBoxOrigen.getSelectedItem().toString();
+                int cantidad = Integer.parseInt(textFieldCantidad.getText());
+                int precio = Integer.parseInt(textFieldPrecio.getText());
+
 
                 // Verificar si el ID es válido
                 if (idProducto <= 0) {
@@ -91,7 +100,7 @@ public class frmProductos {
                 }
 
                 // Crear un objeto Producto con la información obtenida
-                Producto producto = new Producto(idProducto, descripcion, origen);
+                Producto producto = new Producto(idProducto, descripcion, origen, precio, cantidad );
 
                 try {
                     // Llamar al método de actualización del servicio

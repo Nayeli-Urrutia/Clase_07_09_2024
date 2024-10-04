@@ -5,15 +5,19 @@ package umg.Progra2.formas.productos.DataBase.Model;
         private int idProducto;
         private String descripcion;
         private String origen;
+        private int precio;
+        private int cantidad;
 
         // Constructor vacío
         public Producto() {}
 
         // Constructor con parámetros
-        public Producto(int idProducto, String descripcion, String origen) {
+        public Producto(int idProducto, String descripcion, String origen,int precio, int cantidad) {
             this.idProducto = idProducto;
             this.descripcion = descripcion;
             this.origen = origen;
+            this.precio = precio;
+            this.cantidad = cantidad;
         }
 
         // Getters y Setters
@@ -39,6 +43,22 @@ package umg.Progra2.formas.productos.DataBase.Model;
 
         public void setOrigen(String origen) {
             this.origen = origen;
+        }
+
+        public int getPrecio() {
+            return precio;
+        }
+
+        public void setPrecio(int precio) {
+            this.precio = precio;
+        }
+
+        public int getCantidad() {
+            return cantidad;
+        }
+
+        public void setCantidad(int cantidad) {
+            this.cantidad = cantidad;
         }
     }
 
