@@ -1,5 +1,6 @@
 package umg.Progra2.formas.productos.DataBase.Dao;
 
+
 import umg.Progra2.formas.productos.DataBase.DB.DBConnection;
 import umg.Progra2.formas.productos.DataBase.Model.Producto;
 
@@ -30,7 +31,7 @@ public class ProductoDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(INSERT_PRODUCTO_SQL)) {
             preparedStatement.setString(1, producto.getDescripcion());
             preparedStatement.setString(2, producto.getOrigen());
-            preparedStatement.setInt(3, producto.getPrecio());
+            preparedStatement.setDouble(3, producto.getPrecio());
             preparedStatement.setInt(4, producto.getCantidad());
             preparedStatement.executeUpdate();
         }
@@ -47,7 +48,7 @@ public class ProductoDAO {
             while (rs.next()) {
                 String descripcion = rs.getString("descripcion");
                 String origen = rs.getString("origen");
-                int precio = rs.getInt("precio");
+                double precio = rs.getDouble("precio");
                 int cantidad = rs.getInt("cantidad");
                 producto = new Producto(idProducto, descripcion, origen, precio, cantidad);
             }
@@ -66,7 +67,7 @@ public class ProductoDAO {
                 int idProducto = rs.getInt("id_producto");
                 String descripcion = rs.getString("descripcion");
                 String origen = rs.getString("origen");
-                int precio = rs.getInt("precio");
+                double precio = rs.getDouble("precio");
                 int cantidad = rs.getInt("cantidad");
                 productos.add(new Producto(idProducto, descripcion, origen, precio, cantidad));
             }
@@ -92,7 +93,7 @@ public class ProductoDAO {
              PreparedStatement preparedStatement = connection.prepareStatement(UPDATE_PRODUCTO_SQL)) {
             preparedStatement.setString(1, producto.getDescripcion());
             preparedStatement.setString(2, producto.getOrigen());
-            preparedStatement.setInt(3, producto.getPrecio());
+            preparedStatement.setDouble(3, producto.getPrecio());
             preparedStatement.setInt(4, producto.getCantidad());
             preparedStatement.setInt(5, producto.getIdProducto());
             rowUpdated = preparedStatement.executeUpdate() > 0;
@@ -111,7 +112,7 @@ public class ProductoDAO {
                 int idProducto = rs.getInt("id_producto");
                 String descripcion = rs.getString("descripcion");
                 String origen = rs.getString("origen");
-                int precio = rs.getInt("precio");
+                double precio = rs.getDouble("precio");
                 int cantidad = rs.getInt("cantidad");
                 productos.add(new Producto(idProducto, descripcion, origen, precio, cantidad));
             }
@@ -130,7 +131,7 @@ public class ProductoDAO {
                 int idProducto = rs.getInt("id_producto");
                 String descripcion = rs.getString("descripcion");
                 String origen = rs.getString("origen");
-                int precio = rs.getInt("precio");
+                double precio = rs.getDouble("precio");
                 int cantidad = rs.getInt("cantidad");
                 productos.add(new Producto(idProducto, descripcion, origen, precio, cantidad));
             }
@@ -149,7 +150,7 @@ public class ProductoDAO {
                 int idProducto = rs.getInt("id_producto");
                 String descripcion = rs.getString("descripcion");
                 String origen = rs.getString("origen");
-                int precio = rs.getInt("precio");
+                double precio = rs.getDouble("precio");
                 int cantidad = rs.getInt("cantidad");
                 productos.add(new Producto(idProducto, descripcion, origen, precio, cantidad));
             }
@@ -168,7 +169,7 @@ public class ProductoDAO {
                 int idProducto = rs.getInt("id_producto");
                 String descripcion = rs.getString("descripcion");
                 String origen = rs.getString("origen");
-                int precio = rs.getInt("precio");
+                double precio = rs.getDouble("precio");
                 int cantidad = rs.getInt("cantidad");
                 productos.add(new Producto(idProducto, descripcion, origen, precio, cantidad));
             }
@@ -187,7 +188,7 @@ public class ProductoDAO {
                 int idProducto = rs.getInt("id_producto");
                 String descripcion = rs.getString("descripcion");
                 String origen = rs.getString("origen");
-                int precio = rs.getInt("precio");
+                double precio = rs.getDouble("precio");
                 int cantidad = rs.getInt("cantidad");
                 productos.add(new Producto(idProducto, descripcion, origen, precio, cantidad));
             }
@@ -195,17 +196,76 @@ public class ProductoDAO {
         return productos;
     }
 
-    // Método para eliminar un producto si su precio es Q0.00
-    public boolean deleteProductoSiPrecioCero(int idProducto) throws SQLException {
-        // Primero, obtenemos el producto para verificar su precio
-        Producto producto = selectProducto(idProducto);
-        if (producto != null && producto.getPrecio() == 0) {
-            // Si el precio es Q0.00, se procede a eliminarlo
-            return deleteProducto(idProducto);
-        } else {
-            // El producto no existe o su precio no es Q0.00
-            System.out.println("No se puede eliminar el producto. Debe tener un precio de Q0.00.");
-            return false;
+
+    // Consulta para productos con existencia menor a 20
+    public List<Producto> selectProductosExistenciaMenor20() throws SQLException {
+        String sql = "SELECT * FROM tb_producto WHERE cantidad < 20";
+        List<Producto> productos = new ArrayList<>();
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                productos.add(mapResultSetToProducto(rs));
+            }
         }
+        return productos;
+    }
+
+    // Consulta para productos de un país específico
+    public List<Producto> selectProductosPorPais(String pais) throws SQLException {
+        String sql = "SELECT * FROM tb_producto WHERE origen = ?";
+        List<Producto> productos = new ArrayList<>();
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setString(1, pais);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                while (rs.next()) {
+                    productos.add(mapResultSetToProducto(rs));
+                }
+            }
+        }
+        return productos;
+    }
+
+    // Consulta para productos con precio mayor a 2000
+    public List<Producto> selectProductosPrecioMayor2000() throws SQLException {
+        String sql = "SELECT * FROM tb_producto WHERE precio > 2000";
+        List<Producto> productos = new ArrayList<>();
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                productos.add(mapResultSetToProducto(rs));
+            }
+        }
+        return productos;
+    }
+
+    // Consulta para agrupar por país y ordenar por precio (descendente)
+    public List<Producto> selectProductosAgrupadosPorPaisYPrecioDesc() throws SQLException {
+        String sql = "SELECT * FROM tb_producto ORDER BY origen, precio DESC";
+        List<Producto> productos = new ArrayList<>();
+        try (Connection conn = DBConnection.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql);
+             ResultSet rs = pstmt.executeQuery()) {
+
+            while (rs.next()) {
+                productos.add(mapResultSetToProducto(rs));
+            }
+        }
+        return productos;
+    }
+
+    // Método auxiliar para mapear un ResultSet a un objeto Producto
+    private Producto mapResultSetToProducto(ResultSet rs) throws SQLException {
+        return new Producto(
+                rs.getInt("id_producto"),
+                rs.getString("descripcion"),
+                rs.getString("origen"),
+                rs.getDouble("precio"),
+                rs.getInt("cantidad")
+        );
     }
 }

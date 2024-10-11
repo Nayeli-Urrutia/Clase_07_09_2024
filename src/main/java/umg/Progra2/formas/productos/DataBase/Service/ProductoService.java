@@ -1,5 +1,6 @@
 package umg.Progra2.formas.productos.DataBase.Service;
 
+
 import umg.Progra2.formas.productos.DataBase.Dao.ProductoDAO;
 import umg.Progra2.formas.productos.DataBase.Model.Producto;
 
@@ -7,7 +8,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class ProductoService {
-    private ProductoDAO productoDAO = new ProductoDAO();
+    private ProductoDAO productoDAO = new ProductoDAO(); // Asegúrate de que ProductoDAO esté adaptado a SQLite
 
     // Servicio para agregar un nuevo producto
     public void agregarProducto(Producto producto) throws SQLException {
@@ -26,7 +27,7 @@ public class ProductoService {
 
     // Método para obtener productos con precio menor a 100
     public List<Producto> obtenerProductosConPrecioMenorA100() throws SQLException {
-        return productoDAO.selectProductosByPrecio(); // Llama al método del DAO
+        return productoDAO.selectProductosByPrecio();
     }
 
     // Método para eliminar un producto
@@ -51,21 +52,41 @@ public class ProductoService {
 
     // Método para obtener productos con existencia menor a 30
     public List<Producto> obtenerProductosConExistenciaMenorA30() throws SQLException {
-        return productoDAO.selectProductosExistenciaMenor30(); // Llama al método del DAO
+        return productoDAO.selectProductosExistenciaMenor30();
     }
 
     // Método para obtener productos con precio entre 200 y 400
     public List<Producto> obtenerProductosConPrecioEntre200Y400() throws SQLException {
-        return productoDAO.selectProductosPrecioEntre200Y400(); // Llama al método del DAO
+        return productoDAO.selectProductosPrecioEntre200Y400();
     }
 
     // Método para obtener productos ordenados por precio de mayor a menor
     public List<Producto> obtenerProductosOrdenadosPorPrecioDesc() throws SQLException {
-        return productoDAO.selectProductosOrdenadosPorPrecioDesc(); // Llama al método del DAO
+        return productoDAO.selectProductosOrdenadosPorPrecioDesc();
     }
 
     // Método para obtener productos ordenados por existencias de menor a mayor
     public List<Producto> obtenerProductosOrdenadosPorExistenciasAsc() throws SQLException {
-        return productoDAO.selectProductosOrdenadosPorExistenciasAsc(); // Llama al método del DAO
+        return productoDAO.selectProductosOrdenadosPorExistenciasAsc();
+    }
+
+    // Reporte: productos con existencia menor a 20
+    public List<Producto> obtenerProductosConExistenciaMenorA20() throws SQLException {
+        return productoDAO.selectProductosExistenciaMenor20();
+    }
+
+    // Reporte: productos de un país específico
+    public List<Producto> obtenerProductosPorPais(String pais) throws SQLException {
+        return productoDAO.selectProductosPorPais(pais);
+    }
+
+    // Reporte: productos con precio mayor a 2000
+    public List<Producto> obtenerProductosConPrecioMayorA2000() throws SQLException {
+        return productoDAO.selectProductosPrecioMayor2000();
+    }
+
+    // Reporte: productos agrupados por país y ordenados por precio de mayor a menor
+    public List<Producto> obtenerProductosAgrupadosPorPaisYPrecioDesc() throws SQLException {
+        return productoDAO.selectProductosAgrupadosPorPaisYPrecioDesc();
     }
 }

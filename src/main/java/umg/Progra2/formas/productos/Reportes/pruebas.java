@@ -16,6 +16,10 @@ public class pruebas {
                 "Generar reporte de productos con precio entre 200 y 400",
                 "Generar reporte de productos ordenados por precio (mayor a menor)",
                 "Generar reporte de productos ordenados por existencia (menor a mayor)",
+                "Generar reporte de productos con existencia menor a 20",
+                "Generar reporte de productos de un país específico",
+                "Generar reporte de productos con precio mayor a 2000",
+                "Generar reporte de productos agrupados por país y ordenados por precio (mayor a menor)",
                 "Salir"
         };
 
@@ -98,6 +102,49 @@ public class pruebas {
                         }
                         break;
                     case 7:
+                        // Generar reporte de productos con existencia menor a 20
+                        List<Producto> productosConExistenciaMenorA20 = productoService.obtenerProductosConExistenciaMenorA20();
+                        if (productosConExistenciaMenorA20.isEmpty()) {
+                            JOptionPane.showMessageDialog(null, "No se encontraron productos con existencia menor a 20.");
+                        } else {
+                            new PdfReport().generateProductReport(productosConExistenciaMenorA20, "C:\\tmp\\reporte_existencia_menor_20.pdf");
+                            JOptionPane.showMessageDialog(null, "Reporte de productos con existencia menor a 20 generado.");
+                        }
+                        break;
+                    case 8:
+                        // Generar reporte de productos de un país específico
+                        String paisEspecifico = JOptionPane.showInputDialog("Ingrese el país:");
+                        if (paisEspecifico != null && !paisEspecifico.isEmpty()) {
+                            List<Producto> productosDePais = productoService.obtenerProductosPorPais(paisEspecifico);
+                            if (productosDePais.isEmpty()) {
+                                JOptionPane.showMessageDialog(null, "No se encontraron productos para el país especificado.");
+                            } else {
+                                new PdfReport().generateProductReport(productosDePais, "C:\\tmp\\reporte_productos_por_pais.pdf");
+                                JOptionPane.showMessageDialog(null, "Reporte de productos de " + paisEspecifico + " generado.");
+                            }
+                        }
+                        break;
+                    case 9:
+                        // Generar reporte de productos con precio mayor a 2000
+                        List<Producto> productosMayor2000 = productoService.obtenerProductosConPrecioMayorA2000();
+                        if (productosMayor2000.isEmpty()) {
+                            JOptionPane.showMessageDialog(null, "No se encontraron productos con precio mayor a 2000.");
+                        } else {
+                            new PdfReport().generateProductReport(productosMayor2000, "C:\\tmp\\reporte_precio_mayor_2000.pdf");
+                            JOptionPane.showMessageDialog(null, "Reporte de productos con precio mayor a 2000 generado.");
+                        }
+                        break;
+                    case 10:
+                        // Generar reporte de productos agrupados por país y ordenados por precio (mayor a menor)
+                        List<Producto> productosAgrupadosPorPaisYPrecio = productoService.obtenerProductosAgrupadosPorPaisYPrecioDesc();
+                        if (productosAgrupadosPorPaisYPrecio.isEmpty()) {
+                            JOptionPane.showMessageDialog(null, "No se encontraron productos para agrupar por país y ordenar por precio.");
+                        } else {
+                            new PdfReport().generateProductReport(productosAgrupadosPorPaisYPrecio, "C:\\tmp\\reporte_agrupados_por_pais_y_precio.pdf");
+                            JOptionPane.showMessageDialog(null, "Reporte de productos agrupados por país y ordenados por precio generado.");
+                        }
+                        break;
+                    case 11:
                         JOptionPane.showMessageDialog(null, "Saliendo del menú.");
                         return; // Sale del programa
                     default:
